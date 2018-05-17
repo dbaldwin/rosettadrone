@@ -73,6 +73,8 @@ import dji.sdk.products.Aircraft;
 import static com.MAVLink.enums.MAV_CMD.MAV_CMD_COMPONENT_ARM_DISARM;
 import static com.MAVLink.enums.MAV_CMD.MAV_CMD_DO_DIGICAM_CONTROL;
 import static com.MAVLink.enums.MAV_CMD.MAV_CMD_NAV_TAKEOFF;
+import static com.MAVLink.enums.MAV_CMD.MAV_CMD_VIDEO_START_CAPTURE;
+import static com.MAVLink.enums.MAV_CMD.MAV_CMD_VIDEO_STOP_CAPTURE;
 import static com.MAVLink.enums.MAV_COMPONENT.MAV_COMP_ID_AUTOPILOT1;
 import static sq.rogue.rosettadrone.util.getTimestampMicroseconds;
 import static sq.rogue.rosettadrone.util.safeSleep;
@@ -1098,6 +1100,35 @@ public class DroneModel implements CommonCallbacks.CompletionCallback {
         });
     }
 
+    public void startRecordingVideo() {
+        djiAircraft.getCamera().startRecordVideo(new CommonCallbacks.CompletionCallback() {
+            @Override
+            public void onResult(DJIError djiError) {
+                if (djiError == null) {
+                    parent.logMessageDJI("Started recording video");
+                    send_command_ack(MAV_CMD_VIDEO_START_CAPTURE, MAV_RESULT.MAV_RESULT_ACCEPTED);
+                } else {
+                    parent.logMessageDJI("Error starting video recording: " + djiError.toString());
+                    send_command_ack(MAV_CMD_VIDEO_START_CAPTURE, MAV_RESULT.MAV_RESULT_FAILED);
+                }
+            }
+        });
+    }
+
+    public void stopRecordingVideo() {
+        djiAircraft.getCamera().stopRecordVideo(new CommonCallbacks.CompletionCallback() {
+            @Override
+            public void onResult(DJIError djiError) {
+                if (djiError == null) {
+                    parent.logMessageDJI("Stopped recording video");
+                    send_command_ack(MAV_CMD_VIDEO_STOP_CAPTURE, MAV_RESULT.MAV_RESULT_ACCEPTED);
+                } else {
+                    parent.logMessageDJI("Error stopping video recording: " + djiError.toString());
+                    send_command_ack(MAV_CMD_VIDEO_STOP_CAPTURE, MAV_RESULT.MAV_RESULT_FAILED);
+                }
+            }
+        });
+    }
 
     /********************************************
      * CompletionCallback implementation        *

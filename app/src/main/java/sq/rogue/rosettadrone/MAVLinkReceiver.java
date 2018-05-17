@@ -43,6 +43,7 @@ import static com.MAVLink.common.msg_param_request_read.MAVLINK_MSG_ID_PARAM_REQ
 import static com.MAVLink.common.msg_param_set.MAVLINK_MSG_ID_PARAM_SET;
 import static com.MAVLink.common.msg_set_mode.MAVLINK_MSG_ID_SET_MODE;
 import static com.MAVLink.enums.MAV_CMD.MAV_CMD_COMPONENT_ARM_DISARM;
+import static com.MAVLink.enums.MAV_CMD.MAV_CMD_CONDITION_YAW;
 import static com.MAVLink.enums.MAV_CMD.MAV_CMD_DO_DIGICAM_CONTROL;
 import static com.MAVLink.enums.MAV_CMD.MAV_CMD_DO_SET_HOME;
 import static com.MAVLink.enums.MAV_CMD.MAV_CMD_DO_SET_MODE;
@@ -120,8 +121,10 @@ public class MAVLinkReceiver {
                         mModel.send_autopilot_version();
                         break;
                     case MAV_CMD_VIDEO_START_CAPTURE:
+                        mModel.startRecordingVideo();
                         break;
                     case MAV_CMD_VIDEO_STOP_CAPTURE:
+                        mModel.stopRecordingVideo();
                         break;
                     case MAV_CMD_DO_DIGICAM_CONTROL:
                         // DEPRECATED but still used by QGC
